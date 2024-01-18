@@ -1,0 +1,64 @@
+<!-- views/realTimeProducts.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Productos en Tiempo Real</title>
+</head>
+<body>
+    <h1>Lista de Productos en Tiempo Real</h1>
+    <ul id="realTimeProductList">
+        <!-- Aquí se mostrarán los productos -->
+    </ul>
+
+    <!-- Agrega un formulario para agregar nuevos productos -->
+    <form id="addProductForm">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+
+        <label for="thumbnail">Thumbnail URL:</label>
+        <input type="url" id="thumbnail" name="thumbnail" required>
+
+        <button type="submit">Agregar Producto</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+    <script>
+        // Conectar al servidor
+        const socket = io();
+
+        // Escuchar el evento para actualizar
+        socket.on('actualizarProductos', (productos) => {
+            // Actualizar la lista de productos
+            const productList = document.getElementById('realTimeProductList');
+            productList.innerHTML = '';
+
+            productos.forEach(producto => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${producto.title} - $${producto.price}`;
+                productList.appendChild(listItem);
+            });
+        });
+
+        // Agregar un nuevo producto
+        const addProductForm = document.getElementById('addProductForm');
+        addProductForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const price = document.getElementById('price').value;
+            const thumbnail = document.getElementById('thumbnail').value;
+
+            // Enviar el nuevo producto
+            socket.emit('productoNuevo', { title, price, thumbnail });
+
+            // Limpiar el formulario
+            addProductForm.reset();
+        });
+    </script>
+</body>
+</html>
