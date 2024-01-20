@@ -22,7 +22,7 @@ const mongoose = require('mongoose');
 
 
 // Configura la conexión a MongoDB Atlas
-mongoose.connect('mongodb+srv://luib1218:<PASSWORD>@cluster0.yvghbq2.mongodb.net/<DATABASE> ', {
+mongoose.connect('mongodb+srv://luisitobarrionuevodeboca:<password>@cluster0.axwtanl.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
